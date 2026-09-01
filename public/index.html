@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ht">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MH Enterprises - Client Portal</title>
+  <title>MH Enterprises - Kaptal Kliyan</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* MAGENTA-TO-DARK BLUE GRADIENT WITH DYNAMIC DOT WAVE PATTERN */
@@ -28,10 +28,10 @@
 
   <!-- HERO HEADER SECTION -->
   <header class="w-full bg-slate-950/40 backdrop-blur-xl text-white py-10 px-4 text-center border-b-4 border-[#D21034] shadow-2xl mb-8">
-    <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide mb-2 text-white drop-shadow-md">Welcome to MH Enterprises</h1>
-    <p class="text-pink-100 text-sm md:text-base font-light">Fast, Reliable International Shipping & Order Processing</p>
+    <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide mb-2 text-white drop-shadow-md">Byenveni nan MH Enterprises</h1>
+    <p class="text-pink-100 text-sm md:text-base font-light">Livrezon Entènasyonal ak Traitman Kòmònd Rapide e Fiab</p>
     <span class="inline-block bg-[#D21034] text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mt-3 shadow-md">
-      Official Customer Portal
+      Pòtal Offisyèl Kliyan
     </span>
   </header>
 
@@ -41,58 +41,58 @@
     <!-- HEADER / USER BAR -->
     <div class="bg-slate-950/70 backdrop-blur-xl p-6 rounded-2xl border border-pink-500/20 flex justify-between items-center shadow-2xl">
       <div id="userInfo">
-        <h2 class="text-xl font-bold text-white" id="welcomeText">Welcome</h2>
-        <p class="text-xs text-slate-300" id="userPhone">Please log in or register</p>
+        <h2 class="text-xl font-bold text-white" id="welcomeText">Byenveni</h2>
+        <p class="text-xs text-slate-300" id="userPhone">Tanpri konekte oubyen enskri</p>
       </div>
       <div id="authNavButtons" class="flex gap-2">
-        <button onclick="showAuthModal('login')" class="bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition shadow-md shadow-pink-600/40">Login</button>
-        <button onclick="showAuthModal('register')" class="bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2 rounded-lg transition border border-slate-700">Register</button>
+        <button onclick="showAuthModal('login')" class="bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition shadow-md shadow-pink-600/40">Konekte</button>
+        <button onclick="showAuthModal('register')" class="bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2 rounded-lg transition border border-slate-700">Enskri</button>
       </div>
-      <button id="logoutBtn" onclick="logout()" class="hidden bg-slate-800/80 hover:bg-red-900/50 hover:text-red-400 text-slate-400 text-xs font-bold px-4 py-2 rounded-lg border border-slate-700 transition">Logout</button>
+      <button id="logoutBtn" onclick="logout()" class="hidden bg-slate-800/80 hover:bg-red-900/50 hover:text-red-400 text-slate-400 text-xs font-bold px-4 py-2 rounded-lg border border-slate-700 transition">Dekonekte</button>
     </div>
 
     <!-- TAB NAVIGATION BUTTONS -->
     <div id="tabNav" class="grid grid-cols-2 gap-3">
       <button id="tabNewOrder" onclick="switchTab('newOrder')" class="py-3 font-bold text-sm rounded-xl border border-pink-500 bg-pink-600 text-white transition shadow-lg shadow-pink-600/30">
-        New Order
+        Nouvèl Kòmònd
       </button>
       <button id="tabHistory" onclick="switchTab('history')" class="py-3 font-bold text-sm rounded-xl border border-slate-800 bg-slate-950/70 backdrop-blur-xl text-slate-300 hover:text-white transition">
-        My Orders History
+        Istwa Kòmònd Mwen
       </button>
     </div>
 
     <!-- SECTION 1: CREATE ORDER FORM -->
     <div id="sectionNewOrder" class="bg-slate-950/70 backdrop-blur-xl p-6 md:p-8 rounded-2xl border border-pink-500/20 shadow-2xl space-y-6">
-      <h3 class="text-xl font-bold text-white border-b border-slate-800 pb-4">Create Purchase Order</h3>
+      <h3 class="text-xl font-bold text-white border-b border-slate-800 pb-4">Kreye yon Kòmònd</h3>
 
       <form id="orderForm" onsubmit="handleCreateOrder(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Store / Platform</label>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Boutik / Platfòm</label>
           <select id="storePlatform" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
             <option value="Amazon">Amazon</option>
             <option value="eBay">eBay</option>
             <option value="Shein">Shein</option>
             <option value="AliExpress">AliExpress</option>
-            <option value="Other">Other Store</option>
+            <option value="Other">Yon Lòt Boutik</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Product Link (URL)</label>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Lyen Pwoduik la (URL)</label>
           <input type="url" id="itemUrl" required placeholder="https://..." class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Product Cost ($ USD)</label>
+            <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Prix Pwoduik ($ USD)</label>
             <input type="number" step="0.01" id="estimatedPrice" required placeholder="100.00" oninput="calculateFees()" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Shipping Option</label>
+            <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Opsyon Livrezon</label>
             <select id="shippingOption" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
-              <option value="Air Cargo">Air Cargo</option>
-              <option value="Sea Freight">Sea Freight</option>
+              <option value="Air Cargo">Frè Aeryen (Avyon)</option>
+              <option value="Sea Freight">Frè Maritim (Bato)</option>
             </select>
           </div>
         </div>
@@ -100,24 +100,24 @@
         <!-- DETAILED PRICING BREAKDOWN -->
         <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2 text-sm">
           <div class="flex justify-between text-slate-300">
-            <span>Product Cost:</span>
+            <span>Prix Pwoduik:</span>
             <span id="displayItemPrice">$0.00 USD</span>
           </div>
           <div class="flex justify-between text-slate-300">
-            <span>Service Fee (10%):</span>
+            <span>Frè Sèvis (10%):</span>
             <span id="displayFeePrice">$0.00 USD</span>
           </div>
           <div class="flex justify-between font-bold text-emerald-400 border-t border-slate-800 pt-2 text-base">
-            <span>Total Cash to Pay:</span>
+            <span>Total la pou Peye:</span>
             <span id="displayTotalPrice">$0.00 USD</span>
           </div>
           <p class="text-xs text-amber-300 mt-2 flex items-center gap-1">
-            🚚 <span><strong>Note:</strong> Delivery and freight fees will be applied upon arrival at our office.</span>
+            🚚 <span><strong>Nòt:</strong> Frè transpò ak livrezon ap ajoute lè pwoduik la rive nan biwo nou an.</span>
           </p>
         </div>
 
         <button type="submit" id="submitOrderBtn" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-pink-600/30">
-          Generate Payment Code
+          Jènere Kod Pèman an
         </button>
       </form>
     </div>
@@ -125,9 +125,9 @@
     <!-- GENERATED CODE DISPLAY -->
     <div id="codeDisplaySection" class="hidden bg-slate-950/80 backdrop-blur-xl border-2 border-emerald-500/50 p-8 rounded-2xl text-center space-y-4 shadow-2xl">
       <span class="bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-        Order Created Successfully
+        Kòmònd lan Kreye ak Siksè
       </span>
-      <p class="text-sm text-slate-300">Present this payment code at our office to finalize cash payment:</p>
+      <p class="text-sm text-slate-300">Prezante kod pèman sa a nan biwo nou an pou valide pèman kach la:</p>
       
       <div class="bg-slate-900 border border-slate-800 py-6 px-4 rounded-2xl">
         <h3 id="generatedCode" class="text-4xl md:text-5xl font-black font-mono tracking-widest text-emerald-400 select-all">
@@ -137,10 +137,10 @@
 
       <div class="flex gap-3 justify-center">
         <button onclick="copyPaymentCode()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-5 py-2.5 rounded-xl border border-slate-700 transition">
-          📋 Copy Code
+          📋 Kopye Kod la
         </button>
         <button onclick="resetOrderForm()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-md shadow-emerald-600/20">
-          + New Order
+          + Nouvèl Kòmònd
         </button>
       </div>
     </div>
@@ -148,12 +148,12 @@
     <!-- SECTION 2: ORDERS HISTORY -->
     <div id="sectionHistory" class="hidden bg-slate-950/70 backdrop-blur-xl p-6 md:p-8 rounded-2xl border border-pink-500/20 shadow-2xl space-y-6">
       <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-        <h3 class="text-xl font-bold text-white">Order History</h3>
-        <button onclick="loadUserOrders()" class="text-xs text-pink-400 hover:text-pink-300 font-semibold">🔄 Refresh</button>
+        <h3 class="text-xl font-bold text-white">Istwa Kòmònd yo</h3>
+        <button onclick="loadUserOrders()" class="text-xs text-pink-400 hover:text-pink-300 font-semibold">🔄 Rafrachi</button>
       </div>
 
       <div id="ordersList" class="space-y-3">
-        <p class="text-slate-400 text-sm text-center py-4">Loading your orders...</p>
+        <p class="text-slate-400 text-sm text-center py-4">N ap chaje kòmònd ou yo...</p>
       </div>
     </div>
 
@@ -163,28 +163,28 @@
   <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
     <div class="bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-800 w-full max-w-md space-y-6 shadow-2xl">
       <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-        <h3 id="modalTitle" class="text-lg font-bold text-white">Login</h3>
+        <h3 id="modalTitle" class="text-lg font-bold text-white">Konekte</h3>
         <button onclick="closeAuthModal()" class="text-slate-400 hover:text-white">✕</button>
       </div>
 
       <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
         <div id="fullNameGroup" class="hidden">
-          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Full Name</label>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Non Konplè</label>
           <input type="text" id="authFullName" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500">
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Phone Number</label>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Nimewo Telefòn</label>
           <input type="text" id="authPhone" required placeholder="8291234567" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500">
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Password</label>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Mot de Pas</label>
           <input type="password" id="authPassword" required class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500">
         </div>
 
         <button type="submit" id="authSubmitBtn" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-pink-600/30">
-          Submit
+          Voye
         </button>
       </form>
     </div>
@@ -214,13 +214,13 @@
 
     function updateUserUI() {
       if (currentUser) {
-        document.getElementById('welcomeText').textContent = `Hello, ${currentUser.full_name || 'Client'}`;
+        document.getElementById('welcomeText').textContent = `Bonswa, ${currentUser.full_name || 'Kliyan'}`;
         document.getElementById('userPhone').textContent = currentUser.phone;
         document.getElementById('authNavButtons').classList.add('hidden');
         document.getElementById('logoutBtn').classList.remove('hidden');
       } else {
-        document.getElementById('welcomeText').textContent = 'Welcome';
-        document.getElementById('userPhone').textContent = 'Please log in or register';
+        document.getElementById('welcomeText').textContent = 'Byenveni';
+        document.getElementById('userPhone').textContent = 'Tanpri konekte oubyen enskri';
         document.getElementById('authNavButtons').classList.remove('hidden');
         document.getElementById('logoutBtn').classList.add('hidden');
       }
@@ -252,11 +252,11 @@
       const container = document.getElementById('ordersList');
 
       if (!currentUser || !currentUser.id) {
-        container.innerHTML = '<p class="text-amber-300 text-sm text-center py-4">Please sign in to view your order history.</p>';
+        container.innerHTML = '<p class="text-amber-300 text-sm text-center py-4">Tanpri konekte pou w ka wè istwa kòmònd ou yo.</p>';
         return;
       }
 
-      container.innerHTML = '<p class="text-slate-400 text-sm text-center py-4">Fetching your orders...</p>';
+      container.innerHTML = '<p class="text-slate-400 text-sm text-center py-4">N ap chaje kòmònd ou yo...</p>';
 
       try {
         const res = await fetch(`/api/users/${currentUser.id}/orders`);
@@ -269,20 +269,20 @@
             const fee = totalPrice - baseCost;
 
             let badgeStyle = 'bg-amber-950 text-amber-300 border-amber-800';
-            let statusText = 'PENDING PAYMENT';
+            let statusText = 'AN ATTANT PÈMAN';
             let completeMessage = '';
 
             if (order.status === 'COMPLETED') {
               badgeStyle = 'bg-pink-950 text-pink-300 border-pink-800';
-              statusText = 'ORDER COMPLETED';
+              statusText = 'KÒMÒND FINI';
               completeMessage = `
                 <div class="mt-2 p-3 bg-pink-950/40 border border-pink-800/60 rounded-lg text-xs text-pink-200">
-                  🎉 <strong>Notice:</strong> Your order #${order.payment_code} is complete and ready for distribution!
+                  🎉 <strong>Avètisman:</strong> Kòmònd #${order.payment_code} ou an fini e li prè pou distribisyon!
                 </div>
               `;
             } else if (order.status === 'PAID_PROCESSING') {
               badgeStyle = 'bg-emerald-950 text-emerald-400 border-emerald-800';
-              statusText = 'PAID & PROCESSING';
+              statusText = 'PEYE & NAN TRAITMAN';
             }
 
             return `
@@ -295,7 +295,7 @@
                         ${statusText}
                       </span>
                     </div>
-                    <p class="text-xs text-slate-300 mt-1">${order.store_platform} • Total: $${totalPrice.toFixed(2)} USD ($${baseCost.toFixed(2)} + $${fee.toFixed(2)} Fee)</p>
+                    <p class="text-xs text-slate-300 mt-1">${order.store_platform} • Total: $${totalPrice.toFixed(2)} USD ($${baseCost.toFixed(2)} + $${fee.toFixed(2)} Frè)</p>
                     <a href="${order.item_url}" target="_blank" class="text-xs text-pink-400 hover:underline truncate max-w-xs block mt-0.5">${order.item_url}</a>
                   </div>
                   <div class="text-xs text-slate-400 self-end md:self-center">
@@ -307,10 +307,10 @@
             `;
           }).join('');
         } else {
-          container.innerHTML = '<p class="text-slate-300 text-sm text-center py-4">No order history found.</p>';
+          container.innerHTML = '<p class="text-slate-300 text-sm text-center py-4">Pa gen okenn istwa kòmònd pou koulye a.</p>';
         }
       } catch (err) {
-        container.innerHTML = '<p class="text-red-400 text-sm text-center py-4">Failed to load order history.</p>';
+        container.innerHTML = '<p class="text-red-400 text-sm text-center py-4">Erè nan chajman istwa kòmònd yo.</p>';
       }
     }
 
@@ -322,15 +322,15 @@
       const submitBtn = document.getElementById('authSubmitBtn');
 
       if (mode === 'register') {
-        title.textContent = 'Create Account';
+        title.textContent = 'Kreye yon Kont';
         nameGroup.classList.remove('hidden');
         document.getElementById('authFullName').required = true;
-        submitBtn.textContent = 'Register';
+        submitBtn.textContent = 'Enskri';
       } else {
-        title.textContent = 'Sign In';
+        title.textContent = 'Konekte';
         nameGroup.classList.add('hidden');
         document.getElementById('authFullName').required = false;
-        submitBtn.textContent = 'Login';
+        submitBtn.textContent = 'Konekte';
       }
 
       modal.classList.remove('hidden');
@@ -364,10 +364,10 @@
           updateUserUI();
           closeAuthModal();
         } else {
-          alert(data.message || 'Authentication failed.');
+          alert(data.message || 'Identifikasyon pa reysi.');
         }
       } catch (err) {
-        alert('Server connection error.');
+        alert('Erè nan koneksyon ak sèvè a.');
       }
     }
 
@@ -382,7 +382,7 @@
       e.preventDefault();
 
       if (!currentUser) {
-        alert('Please log in or register before submitting an order.');
+        alert('Tanpri konekte oubyen enskri anvan ou voye yon kòmònd.');
         showAuthModal('login');
         return;
       }
@@ -392,11 +392,11 @@
 
       const submitBtn = document.getElementById('submitOrderBtn');
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Generating...';
+      submitBtn.textContent = 'N ap jènere...';
 
       const payload = {
         userId: currentUser.id,
-        clientName: currentUser.full_name || 'Client',
+        clientName: currentUser.full_name || 'Kliyan',
         clientPhone: currentUser.phone,
         storePlatform: document.getElementById('storePlatform').value,
         itemUrl: document.getElementById('itemUrl').value,
@@ -419,20 +419,20 @@
           displaySection.classList.remove('hidden');
           displaySection.scrollIntoView({ behavior: 'smooth' });
         } else {
-          alert(data.message || 'Failed to generate code.');
+          alert(data.message || 'Erè nan jenerasyon kod la.');
         }
       } catch (err) {
-        alert('Server error creating order.');
+        alert('Erè sèvè nan kreyasyon kòmònd lan.');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Generate Payment Code';
+        submitBtn.textContent = 'Jènere Kod Pèman an';
       }
     }
 
     function copyPaymentCode() {
       const code = document.getElementById('generatedCode').textContent.trim();
       navigator.clipboard.writeText(code);
-      alert('Payment code copied to clipboard!');
+      alert('Kod pèman an kopye nan prespabyen ou!');
     }
 
     function resetOrderForm() {
