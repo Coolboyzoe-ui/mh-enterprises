@@ -1,100 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MH Enterprises</title>
-  <style>
-    /* Reset & Base Styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    /* Top Accent Stripe (Haitian Flag Blue & Red) */
-    .flag-bar {
-      height: 6px;
-      width: 100%;
-      background: linear-gradient(to right, #00209F 50%, #D21034 50%);
-    }
-
-    /* Hero Header */
-    header {
-      background: linear-gradient(135deg, #00209F 0%, #001254 100%);
-      color: #ffffff;
-      padding: 40px 20px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      border-bottom: 4px solid #D21034;
-    }
-
-    header h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-    }
-
-    header p {
-      font-size: 1.1rem;
-      color: #e0e7ff;
-      font-weight: 300;
-    }
-
-    .badge-accent {
-      display: inline-block;
-      background-color: #D21034;
-      color: #ffffff;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-top: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* Container */
-    .main-container {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="flag-bar"></div>
-
-  <header>
-    <h1>Welcome to MH Enterprises</h1>
-    <p>Fast, Reliable International Shipping & Order Processing</p>
-    <span class="badge-accent">Official Customer Portal</span>
-  </header>
-
-  <div class="main-container">
-    </div>
-
-</body>
-</html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MH Enterprises - Client Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center p-4 md:p-8">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center">
 
-  <div class="w-full max-w-2xl space-y-6">
+  <!-- TOP ACCENT STRIPE (Haitian Flag Blue & Red) -->
+  <div class="h-1.5 w-full bg-gradient-to-r from-[#00209F] via-[#00209F] to-[#D21034]"></div>
+
+  <!-- HERO HEADER SECTION -->
+  <header class="w-full bg-gradient-to-br from-[#00209F] to-[#001254] text-white py-10 px-4 text-center border-b-4 border-[#D21034] shadow-xl mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide mb-2">Welcome to MH Enterprises</h1>
+    <p class="text-indigo-100 text-sm md:text-base font-light">Fast, Reliable International Shipping & Order Processing</p>
+    <span class="inline-block bg-[#D21034] text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mt-3">
+      Official Customer Portal
+    </span>
+  </header>
+
+  <!-- MAIN CLIENT PORTAL CONTAINER -->
+  <main class="w-full max-w-2xl px-4 pb-12 space-y-6">
 
     <!-- HEADER / USER BAR -->
     <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 flex justify-between items-center shadow-xl">
       <div id="userInfo">
-        <h1 class="text-xl font-bold text-white" id="welcomeText">Welcome</h1>
+        <h2 class="text-xl font-bold text-white" id="welcomeText">Welcome</h2>
         <p class="text-xs text-slate-400" id="userPhone">Please log in or register</p>
       </div>
       <div id="authNavButtons" class="flex gap-2">
@@ -116,7 +48,7 @@
 
     <!-- SECTION 1: CREATE ORDER FORM -->
     <div id="sectionNewOrder" class="bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-800 shadow-xl space-y-6">
-      <h2 class="text-xl font-bold text-white border-b border-slate-800 pb-4">Create Purchase Order</h2>
+      <h3 class="text-xl font-bold text-white border-b border-slate-800 pb-4">Create Purchase Order</h3>
 
       <form id="orderForm" onsubmit="handleCreateOrder(event)" class="space-y-4">
         <div>
@@ -201,7 +133,7 @@
     <!-- SECTION 2: ORDERS HISTORY -->
     <div id="sectionHistory" class="hidden bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-800 shadow-xl space-y-6">
       <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-        <h2 class="text-xl font-bold text-white">Order History</h2>
+        <h3 class="text-xl font-bold text-white">Order History</h3>
         <button onclick="loadUserOrders()" class="text-xs text-blue-400 hover:text-blue-300 font-semibold">🔄 Refresh</button>
       </div>
 
@@ -210,7 +142,7 @@
       </div>
     </div>
 
-  </div>
+  </main>
 
   <!-- AUTH MODAL -->
   <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
