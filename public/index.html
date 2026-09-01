@@ -6,26 +6,30 @@
   <title>MH Enterprises - Client Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* GUARANTEED RADIAL GRADIENT BACKGROUND */
+    /* MAGENTA-TO-DARK BLUE GRADIENT WITH DYNAMIC DOT WAVE PATTERN */
     body {
-      background-color: #030712;
+      background-color: #0d0628;
       background-image: 
-        radial-gradient(at 50% 0%, rgba(30, 58, 138, 0.45) 0px, transparent 50%),
-        radial-gradient(at 100% 35%, rgba(14, 165, 233, 0.15) 0px, transparent 40%),
-        radial-gradient(at 0% 75%, rgba(29, 78, 216, 0.2) 0px, transparent 45%);
+        /* Dot grid dynamic wave pattern overlay */
+        radial-gradient(rgba(244, 114, 182, 0.35) 2px, transparent 2.5px),
+        radial-gradient(rgba(56, 189, 248, 0.25) 1.5px, transparent 2px),
+        /* Vibrant Magenta to Deep Blue background gradient */
+        linear-gradient(135deg, #ec4899 0%, #a855f7 35%, #3b82f6 70%, #030712 100%);
+      background-size: 32px 32px, 24px 24px, 100% 100%;
+      background-position: 0 0, 12px 12px, 0 0;
       background-attachment: fixed;
     }
   </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col items-center relative selection:bg-blue-600 selection:text-white font-sans">
+<body class="text-slate-100 min-h-screen flex flex-col items-center relative selection:bg-pink-600 selection:text-white font-sans">
 
   <!-- TOP ACCENT STRIPE (Haitian Flag Blue & Red) -->
   <div class="h-1.5 w-full bg-gradient-to-r from-[#00209F] via-[#00209F] to-[#D21034]"></div>
 
   <!-- HERO HEADER SECTION -->
-  <header class="w-full bg-gradient-to-br from-[#00209F] to-[#001254] text-white py-10 px-4 text-center border-b-4 border-[#D21034] shadow-2xl shadow-blue-950/50 mb-8">
-    <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide mb-2">Welcome to MH Enterprises</h1>
-    <p class="text-indigo-100 text-sm md:text-base font-light">Fast, Reliable International Shipping & Order Processing</p>
+  <header class="w-full bg-slate-950/40 backdrop-blur-xl text-white py-10 px-4 text-center border-b-4 border-[#D21034] shadow-2xl mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide mb-2 text-white drop-shadow-md">Welcome to MH Enterprises</h1>
+    <p class="text-pink-100 text-sm md:text-base font-light">Fast, Reliable International Shipping & Order Processing</p>
     <span class="inline-block bg-[#D21034] text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mt-3 shadow-md">
       Official Customer Portal
     </span>
@@ -35,36 +39,36 @@
   <main class="w-full max-w-2xl px-4 pb-12 space-y-6">
 
     <!-- HEADER / USER BAR -->
-    <div class="bg-gray-900/80 backdrop-blur-md p-6 rounded-2xl border border-blue-900/40 flex justify-between items-center shadow-2xl">
+    <div class="bg-slate-950/70 backdrop-blur-xl p-6 rounded-2xl border border-pink-500/20 flex justify-between items-center shadow-2xl">
       <div id="userInfo">
         <h2 class="text-xl font-bold text-white" id="welcomeText">Welcome</h2>
-        <p class="text-xs text-slate-400" id="userPhone">Please log in or register</p>
+        <p class="text-xs text-slate-300" id="userPhone">Please log in or register</p>
       </div>
       <div id="authNavButtons" class="flex gap-2">
-        <button onclick="showAuthModal('login')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition shadow-md shadow-blue-600/30">Login</button>
-        <button onclick="showAuthModal('register')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2 rounded-lg transition border border-slate-700">Register</button>
+        <button onclick="showAuthModal('login')" class="bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition shadow-md shadow-pink-600/40">Login</button>
+        <button onclick="showAuthModal('register')" class="bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2 rounded-lg transition border border-slate-700">Register</button>
       </div>
-      <button id="logoutBtn" onclick="logout()" class="hidden bg-slate-800 hover:bg-red-900/50 hover:text-red-400 text-slate-400 text-xs font-bold px-4 py-2 rounded-lg border border-slate-700 transition">Logout</button>
+      <button id="logoutBtn" onclick="logout()" class="hidden bg-slate-800/80 hover:bg-red-900/50 hover:text-red-400 text-slate-400 text-xs font-bold px-4 py-2 rounded-lg border border-slate-700 transition">Logout</button>
     </div>
 
     <!-- TAB NAVIGATION BUTTONS -->
     <div id="tabNav" class="grid grid-cols-2 gap-3">
-      <button id="tabNewOrder" onclick="switchTab('newOrder')" class="py-3 font-bold text-sm rounded-xl border border-blue-500 bg-blue-600 text-white transition shadow-lg shadow-blue-600/30">
+      <button id="tabNewOrder" onclick="switchTab('newOrder')" class="py-3 font-bold text-sm rounded-xl border border-pink-500 bg-pink-600 text-white transition shadow-lg shadow-pink-600/30">
         New Order
       </button>
-      <button id="tabHistory" onclick="switchTab('history')" class="py-3 font-bold text-sm rounded-xl border border-slate-800 bg-gray-900/80 backdrop-blur-md text-slate-400 hover:text-white transition">
+      <button id="tabHistory" onclick="switchTab('history')" class="py-3 font-bold text-sm rounded-xl border border-slate-800 bg-slate-950/70 backdrop-blur-xl text-slate-300 hover:text-white transition">
         My Orders History
       </button>
     </div>
 
     <!-- SECTION 1: CREATE ORDER FORM -->
-    <div id="sectionNewOrder" class="bg-gray-900/80 backdrop-blur-md p-6 md:p-8 rounded-2xl border border-blue-900/40 shadow-2xl space-y-6">
-      <h3 class="text-xl font-bold text-white border-b border-gray-800 pb-4">Create Purchase Order</h3>
+    <div id="sectionNewOrder" class="bg-slate-950/70 backdrop-blur-xl p-6 md:p-8 rounded-2xl border border-pink-500/20 shadow-2xl space-y-6">
+      <h3 class="text-xl font-bold text-white border-b border-slate-800 pb-4">Create Purchase Order</h3>
 
       <form id="orderForm" onsubmit="handleCreateOrder(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Store / Platform</label>
-          <select id="storePlatform" class="w-full px-4 py-3 bg-gray-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Store / Platform</label>
+          <select id="storePlatform" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
             <option value="Amazon">Amazon</option>
             <option value="eBay">eBay</option>
             <option value="Shein">Shein</option>
@@ -74,19 +78,19 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Product Link (URL)</label>
-          <input type="url" id="itemUrl" required placeholder="https://..." class="w-full px-4 py-3 bg-gray-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Product Link (URL)</label>
+          <input type="url" id="itemUrl" required placeholder="https://..." class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Product Cost ($ USD)</label>
-            <input type="number" step="0.01" id="estimatedPrice" required placeholder="100.00" oninput="calculateFees()" class="w-full px-4 py-3 bg-gray-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Product Cost ($ USD)</label>
+            <input type="number" step="0.01" id="estimatedPrice" required placeholder="100.00" oninput="calculateFees()" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Shipping Option</label>
-            <select id="shippingOption" class="w-full px-4 py-3 bg-gray-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Shipping Option</label>
+            <select id="shippingOption" class="w-full px-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition">
               <option value="Air Cargo">Air Cargo</option>
               <option value="Sea Freight">Sea Freight</option>
             </select>
@@ -94,38 +98,38 @@
         </div>
 
         <!-- DETAILED PRICING BREAKDOWN -->
-        <div class="bg-gray-950/80 border border-slate-800 p-4 rounded-xl space-y-2 text-sm">
-          <div class="flex justify-between text-slate-400">
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2 text-sm">
+          <div class="flex justify-between text-slate-300">
             <span>Product Cost:</span>
             <span id="displayItemPrice">$0.00 USD</span>
           </div>
-          <div class="flex justify-between text-slate-400">
+          <div class="flex justify-between text-slate-300">
             <span>Service Fee (10%):</span>
             <span id="displayFeePrice">$0.00 USD</span>
           </div>
-          <div class="flex justify-between font-bold text-emerald-400 border-t border-gray-800 pt-2 text-base">
+          <div class="flex justify-between font-bold text-emerald-400 border-t border-slate-800 pt-2 text-base">
             <span>Total Cash to Pay:</span>
             <span id="displayTotalPrice">$0.00 USD</span>
           </div>
-          <p class="text-xs text-amber-400 mt-2 flex items-center gap-1">
+          <p class="text-xs text-amber-300 mt-2 flex items-center gap-1">
             🚚 <span><strong>Note:</strong> Delivery and freight fees will be applied upon arrival at our office.</span>
           </p>
         </div>
 
-        <button type="submit" id="submitOrderBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-600/30">
+        <button type="submit" id="submitOrderBtn" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-pink-600/30">
           Generate Payment Code
         </button>
       </form>
     </div>
 
     <!-- GENERATED CODE DISPLAY -->
-    <div id="codeDisplaySection" class="hidden bg-gray-900/90 backdrop-blur-md border-2 border-emerald-500/50 p-8 rounded-2xl text-center space-y-4 shadow-2xl">
+    <div id="codeDisplaySection" class="hidden bg-slate-950/80 backdrop-blur-xl border-2 border-emerald-500/50 p-8 rounded-2xl text-center space-y-4 shadow-2xl">
       <span class="bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
         Order Created Successfully
       </span>
-      <p class="text-sm text-slate-400">Present this payment code at our office to finalize cash payment:</p>
+      <p class="text-sm text-slate-300">Present this payment code at our office to finalize cash payment:</p>
       
-      <div class="bg-gray-950 border border-slate-800 py-6 px-4 rounded-2xl">
+      <div class="bg-slate-900 border border-slate-800 py-6 px-4 rounded-2xl">
         <h3 id="generatedCode" class="text-4xl md:text-5xl font-black font-mono tracking-widest text-emerald-400 select-all">
           MHE-XXXXXX
         </h3>
@@ -142,44 +146,44 @@
     </div>
 
     <!-- SECTION 2: ORDERS HISTORY -->
-    <div id="sectionHistory" class="hidden bg-gray-900/80 backdrop-blur-md p-6 md:p-8 rounded-2xl border border-blue-900/40 shadow-2xl space-y-6">
-      <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+    <div id="sectionHistory" class="hidden bg-slate-950/70 backdrop-blur-xl p-6 md:p-8 rounded-2xl border border-pink-500/20 shadow-2xl space-y-6">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-4">
         <h3 class="text-xl font-bold text-white">Order History</h3>
-        <button onclick="loadUserOrders()" class="text-xs text-blue-400 hover:text-blue-300 font-semibold">🔄 Refresh</button>
+        <button onclick="loadUserOrders()" class="text-xs text-pink-400 hover:text-pink-300 font-semibold">🔄 Refresh</button>
       </div>
 
       <div id="ordersList" class="space-y-3">
-        <p class="text-slate-500 text-sm text-center py-4">Loading your orders...</p>
+        <p class="text-slate-400 text-sm text-center py-4">Loading your orders...</p>
       </div>
     </div>
 
   </main>
 
   <!-- AUTH MODAL -->
-  <div id="authModal" class="fixed inset-0 bg-gray-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
-    <div class="bg-gray-900 p-6 md:p-8 rounded-2xl border border-slate-800 w-full max-w-md space-y-6 shadow-2xl">
-      <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+  <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+    <div class="bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-800 w-full max-w-md space-y-6 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-4">
         <h3 id="modalTitle" class="text-lg font-bold text-white">Login</h3>
         <button onclick="closeAuthModal()" class="text-slate-400 hover:text-white">✕</button>
       </div>
 
       <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
         <div id="fullNameGroup" class="hidden">
-          <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Full Name</label>
-          <input type="text" id="authFullName" class="w-full px-4 py-3 bg-gray-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Full Name</label>
+          <input type="text" id="authFullName" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500">
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Phone Number</label>
-          <input type="text" id="authPhone" required placeholder="8291234567" class="w-full px-4 py-3 bg-gray-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Phone Number</label>
+          <input type="text" id="authPhone" required placeholder="8291234567" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500">
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Password</label>
-          <input type="password" id="authPassword" required class="w-full px-4 py-3 bg-gray-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Password</label>
+          <input type="password" id="authPassword" required class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500">
         </div>
 
-        <button type="submit" id="authSubmitBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-600/30">
+        <button type="submit" id="authSubmitBtn" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-pink-600/30">
           Submit
         </button>
       </form>
@@ -230,13 +234,13 @@
       const codeSec = document.getElementById('codeDisplaySection');
 
       if (tab === 'newOrder') {
-        btnNew.className = "py-3 font-bold text-sm rounded-xl border border-blue-500 bg-blue-600 text-white transition shadow-lg shadow-blue-600/30";
-        btnHist.className = "py-3 font-bold text-sm rounded-xl border border-slate-800 bg-gray-900/80 backdrop-blur-md text-slate-400 hover:text-white transition";
+        btnNew.className = "py-3 font-bold text-sm rounded-xl border border-pink-500 bg-pink-600 text-white transition shadow-lg shadow-pink-600/30";
+        btnHist.className = "py-3 font-bold text-sm rounded-xl border border-slate-800 bg-slate-950/70 backdrop-blur-xl text-slate-300 hover:text-white transition";
         secNew.classList.remove('hidden');
         secHist.classList.add('hidden');
       } else {
-        btnHist.className = "py-3 font-bold text-sm rounded-xl border border-blue-500 bg-blue-600 text-white transition shadow-lg shadow-blue-600/30";
-        btnNew.className = "py-3 font-bold text-sm rounded-xl border border-slate-800 bg-gray-900/80 backdrop-blur-md text-slate-400 hover:text-white transition";
+        btnHist.className = "py-3 font-bold text-sm rounded-xl border border-pink-500 bg-pink-600 text-white transition shadow-lg shadow-pink-600/30";
+        btnNew.className = "py-3 font-bold text-sm rounded-xl border border-slate-800 bg-slate-950/70 backdrop-blur-xl text-slate-300 hover:text-white transition";
         secHist.classList.remove('hidden');
         secNew.classList.add('hidden');
         codeSec.classList.add('hidden');
@@ -248,11 +252,11 @@
       const container = document.getElementById('ordersList');
 
       if (!currentUser || !currentUser.id) {
-        container.innerHTML = '<p class="text-amber-400 text-sm text-center py-4">Please sign in to view your order history.</p>';
+        container.innerHTML = '<p class="text-amber-300 text-sm text-center py-4">Please sign in to view your order history.</p>';
         return;
       }
 
-      container.innerHTML = '<p class="text-slate-500 text-sm text-center py-4">Fetching your orders...</p>';
+      container.innerHTML = '<p class="text-slate-400 text-sm text-center py-4">Fetching your orders...</p>';
 
       try {
         const res = await fetch(`/api/users/${currentUser.id}/orders`);
@@ -264,15 +268,15 @@
             const baseCost = totalPrice / 1.10;
             const fee = totalPrice - baseCost;
 
-            let badgeStyle = 'bg-amber-950 text-amber-400 border-amber-800';
+            let badgeStyle = 'bg-amber-950 text-amber-300 border-amber-800';
             let statusText = 'PENDING PAYMENT';
             let completeMessage = '';
 
             if (order.status === 'COMPLETED') {
-              badgeStyle = 'bg-blue-950 text-blue-400 border-blue-800';
+              badgeStyle = 'bg-pink-950 text-pink-300 border-pink-800';
               statusText = 'ORDER COMPLETED';
               completeMessage = `
-                <div class="mt-2 p-3 bg-blue-950/40 border border-blue-800/60 rounded-lg text-xs text-blue-300">
+                <div class="mt-2 p-3 bg-pink-950/40 border border-pink-800/60 rounded-lg text-xs text-pink-200">
                   🎉 <strong>Notice:</strong> Your order #${order.payment_code} is complete and ready for distribution!
                 </div>
               `;
@@ -282,7 +286,7 @@
             }
 
             return `
-              <div class="bg-gray-950 border border-slate-800 p-4 rounded-xl flex flex-col gap-2">
+              <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-col gap-2">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                   <div>
                     <div class="flex items-center gap-2">
@@ -291,10 +295,10 @@
                         ${statusText}
                       </span>
                     </div>
-                    <p class="text-xs text-slate-400 mt-1">${order.store_platform} • Total: $${totalPrice.toFixed(2)} USD ($${baseCost.toFixed(2)} + $${fee.toFixed(2)} Fee)</p>
-                    <a href="${order.item_url}" target="_blank" class="text-xs text-blue-400 hover:underline truncate max-w-xs block mt-0.5">${order.item_url}</a>
+                    <p class="text-xs text-slate-300 mt-1">${order.store_platform} • Total: $${totalPrice.toFixed(2)} USD ($${baseCost.toFixed(2)} + $${fee.toFixed(2)} Fee)</p>
+                    <a href="${order.item_url}" target="_blank" class="text-xs text-pink-400 hover:underline truncate max-w-xs block mt-0.5">${order.item_url}</a>
                   </div>
-                  <div class="text-xs text-slate-500 self-end md:self-center">
+                  <div class="text-xs text-slate-400 self-end md:self-center">
                     ${new Date(order.created_at).toLocaleDateString()}
                   </div>
                 </div>
@@ -303,7 +307,7 @@
             `;
           }).join('');
         } else {
-          container.innerHTML = '<p class="text-slate-400 text-sm text-center py-4">No order history found.</p>';
+          container.innerHTML = '<p class="text-slate-300 text-sm text-center py-4">No order history found.</p>';
         }
       } catch (err) {
         container.innerHTML = '<p class="text-red-400 text-sm text-center py-4">Failed to load order history.</p>';
