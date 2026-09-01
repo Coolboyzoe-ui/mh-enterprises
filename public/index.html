@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MH Enterprises - Pasé Kòmònd</title>
+  <title>MH Enterprises - Achte Pou Ou</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -18,34 +18,59 @@
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col items-center font-sans selection:bg-pink-600 selection:text-white">
 
-  <!-- TOP ACCENT STRIPE -->
   <div class="h-1.5 w-full bg-gradient-to-r from-[#00209F] via-[#00209F] to-[#D21034]"></div>
 
-  <!-- HEADER NAVBAR -->
   <header class="w-full bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 py-4 px-6 flex justify-between items-center shadow-xl">
     <div class="flex items-center gap-3">
       <h1 class="text-xl font-black text-white tracking-wide">MH ENTERPRISES</h1>
       <span class="bg-blue-950 text-blue-400 border border-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
-        Achte Pou Ou
+        Sèvis Achte Pou Ou
       </span>
     </div>
-    <div>
-      <a href="/admin.html" class="text-xs text-slate-400 hover:text-white transition">Aksè Admin</a>
+
+    <div class="flex items-center gap-3">
+      <div id="authButtonsLoggedOut" class="flex gap-2">
+        <button onclick="openAuthModal('login')" class="text-xs text-slate-300 hover:text-white bg-slate-900 border border-slate-700 font-bold px-3 py-1.5 rounded-lg transition">
+          Konekte
+        </button>
+        <button onclick="openAuthModal('register')" class="text-xs text-white bg-pink-600 hover:bg-pink-500 font-bold px-3 py-1.5 rounded-lg transition shadow-md shadow-pink-600/30">
+          Kreye Kont
+        </button>
+      </div>
+
+      <div id="authButtonsLoggedIn" class="hidden flex items-center gap-3">
+        <div class="text-right">
+          <span id="navUserName" class="block text-xs font-bold text-white"></span>
+          <span id="navUserPhone" class="block text-[10px] text-slate-400"></span>
+        </div>
+        <button onclick="handleLogout()" class="text-xs text-red-400 hover:text-red-300 bg-red-950/50 border border-red-800 font-bold px-3 py-1.5 rounded-lg transition">
+          Dekonekte
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- FORM CONTAINER -->
-  <main class="w-full max-w-2xl p-4 md:p-8 my-6">
+  <main class="w-full max-w-2xl p-4 md:p-8 my-6 space-y-6">
+
+    <div id="userHistoryCard" class="hidden bg-slate-950/80 backdrop-blur-xl p-5 rounded-3xl border border-slate-800 shadow-2xl space-y-3">
+      <div class="flex justify-between items-center">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider">Kòmònd Ou Yo Pasé Deja</h3>
+        <button onclick="fetchUserOrders()" class="text-xs text-pink-400 hover:underline">🔄 Rafrachi</button>
+      </div>
+      <div id="userOrdersList" class="space-y-2 text-xs">
+        <p class="text-slate-400">N ap chaje istorik kòmònd ou yo...</p>
+      </div>
+    </div>
+
     <div class="bg-slate-950/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-6">
       
       <div>
         <h2 class="text-2xl font-black text-white">Pasé yon Kòmònd</h2>
-        <p class="text-xs text-slate-400 mt-1">Kole lyen pwodui an OUBYEN lyen panier/cart ou an (Amazon, Shein, AliExpress, etc.).</p>
+        <p class="text-xs text-slate-400 mt-1">Kole lyen pwodui an (Amazon, Shein, eBay, etc.). Sistèm nan ap kalkile pri an dirèk.</p>
       </div>
 
       <form id="orderForm" onsubmit="handleOrderSubmit(event)" class="space-y-5">
 
-        <!-- CLIENT INFO -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Non Konplè</label>
@@ -57,7 +82,6 @@
           </div>
         </div>
 
-        <!-- STORE PLATFORM & ITEM/CART LINK -->
         <div>
           <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Boutik Sou Enternèt la</label>
           <select id="storePlatform" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pink-500 transition">
@@ -72,7 +96,7 @@
         <div>
           <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Lyen Pwodui oubyen Panier / Cart (URL)</label>
           <div class="relative">
-            <input type="url" id="itemUrl" required onchange="autoFetchPrice()" placeholder="https://www.amazon.com/dp/... or cart link" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pink-500 transition pr-28">
+            <input type="url" id="itemUrl" required onchange="autoFetchPrice()" placeholder="https://www.amazon.com/dp/..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pink-500 transition pr-28">
             <button type="button" onclick="autoFetchPrice()" class="absolute right-2 top-2 bottom-2 bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold px-3 rounded-lg transition">
               Eskane Pri
             </button>
@@ -80,7 +104,6 @@
           <span id="fetchStatus" class="text-[11px] text-slate-400 mt-1 block"></span>
         </div>
 
-        <!-- AUTOMATIC PRICING & 10% FEE BREAKDOWN -->
         <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800 space-y-4">
           <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Kalkil Otomatik & Frè 10%</h3>
 
@@ -96,7 +119,6 @@
             </div>
           </div>
 
-          <!-- SUMMARY BREAKDOWN -->
           <div class="border-t border-slate-800 pt-3 space-y-1.5 text-xs">
             <div class="flex justify-between text-slate-400">
               <span>Sous-total (Pwodui + Shipping):</span>
@@ -113,7 +135,6 @@
           </div>
         </div>
 
-        <!-- SHIPPING OPTION -->
         <div>
           <label class="block text-xs font-semibold text-slate-300 uppercase mb-2">Opsyon Anvwa (Shipping Method)</label>
           <select id="shippingOption" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pink-500 transition">
@@ -122,14 +143,12 @@
           </select>
         </div>
 
-        <!-- SUBMIT BUTTON -->
         <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-pink-600/25">
           Voye Kòmònd la & Jeneré Kod Pèman
         </button>
 
       </form>
 
-      <!-- CONFIRMATION BOX -->
       <div id="orderResult" class="hidden bg-emerald-950/40 border border-emerald-500/40 p-5 rounded-2xl space-y-3">
         <h3 class="text-emerald-400 font-bold text-sm flex items-center gap-2">
           <span>✅</span> Kòmònd Ou an Kreye ak Siksè!
@@ -148,14 +167,86 @@
     </div>
   </main>
 
+  <div id="authModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md flex justify-center items-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-md p-6 rounded-3xl shadow-2xl relative space-y-4">
+      <button onclick="closeAuthModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white text-sm font-bold">✕</button>
+
+      <div class="flex border-b border-slate-800 pb-3 gap-4">
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="text-sm font-bold text-pink-500 border-b-2 border-pink-500 pb-1">Konekte</button>
+        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="text-sm font-bold text-slate-400 pb-1">Kreye Kont</button>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Nimewo Telefòn</label>
+          <input type="tel" id="loginPhone" required placeholder="+509 3700 0000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pink-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Mot de Passe</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pink-500">
+        </div>
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-xl transition">Konekte Kounye a</button>
+      </form>
+
+      <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="hidden space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Non Konplè</label>
+          <input type="text" id="regName" required placeholder="eg. Jean Baptiste" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pink-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Nimewo Telefòn</label>
+          <input type="tel" id="regPhone" required placeholder="+509 3700 0000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pink-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Mot de Passe</label>
+          <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-pink-500">
+        </div>
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition">Kreye Kont Mwen</button>
+      </form>
+    </div>
+  </div>
+
   <script>
+    let currentUser = null;
+
+    window.onload = () => {
+      const savedUser = localStorage.getItem('currentUser');
+      if (savedUser) {
+        try {
+          currentUser = JSON.parse(savedUser);
+          updateUserUI();
+        } catch (e) {
+          localStorage.removeItem('currentUser');
+        }
+      }
+    };
+
+    function updateUserUI() {
+      if (currentUser) {
+        document.getElementById('authButtonsLoggedOut').classList.add('hidden');
+        document.getElementById('authButtonsLoggedIn').classList.remove('hidden');
+        document.getElementById('navUserName').textContent = currentUser.full_name;
+        document.getElementById('navUserPhone').textContent = currentUser.phone;
+        
+        document.getElementById('clientName').value = currentUser.full_name;
+        document.getElementById('clientPhone').value = currentUser.phone;
+
+        document.getElementById('userHistoryCard').classList.remove('hidden');
+        fetchUserOrders();
+      } else {
+        document.getElementById('authButtonsLoggedOut').classList.remove('hidden');
+        document.getElementById('authButtonsLoggedIn').classList.add('hidden');
+        document.getElementById('userHistoryCard').classList.add('hidden');
+      }
+    }
+
     async function autoFetchPrice() {
       const urlInput = document.getElementById('itemUrl').value.trim();
       const statusEl = document.getElementById('fetchStatus');
 
       if (!urlInput) return;
 
-      statusEl.textContent = '⏳ N ap verifye lyen an...';
+      statusEl.textContent = '⏳ N ap verifye ak eskane lyen an...';
       statusEl.className = 'text-[11px] text-amber-400 mt-1 block';
 
       try {
@@ -170,15 +261,15 @@
         if (data.success && data.price > 0) {
           document.getElementById('basePrice').value = data.price.toFixed(2);
           document.getElementById('shippingPrice').value = (data.shipping || 0).toFixed(2);
-          statusEl.textContent = '✅ Pri an detekte otomatikman!';
+          statusEl.textContent = `✅ Pri an detekte otomatikman ($${data.price.toFixed(2)})!`;
           statusEl.className = 'text-[11px] text-emerald-400 mt-1 block';
           calculateTotal();
         } else {
-          statusEl.textContent = 'ℹ️ Antre total panier/pwodui an anba a si li pa chaje otomatikman.';
+          statusEl.textContent = 'ℹ️ Antre total pwodui/panier an ak men si li pa chaje otomatikman.';
           statusEl.className = 'text-[11px] text-slate-400 mt-1 block';
         }
       } catch (err) {
-        statusEl.textContent = 'ℹ️ Antre total panier/pwodui an anba a.';
+        statusEl.textContent = 'ℹ️ Antre montan an ak men.';
         statusEl.className = 'text-[11px] text-slate-400 mt-1 block';
       }
     }
@@ -205,7 +296,7 @@
       const totalToPay = calculateTotal();
 
       if (totalToPay <= 0) {
-        alert('Tanpri antre yon pri valid pou pwodui an oubyen panier an.');
+        alert('Tanpri antre yon pri valid pou pwodui an.');
         return;
       }
 
@@ -218,25 +309,34 @@
         storePlatform: document.getElementById('storePlatform').value,
         itemUrl: document.getElementById('itemUrl').value.trim(),
         estimatedPrice: totalToPay.toFixed(2),
-        shippingOption: document.getElementById('shippingOption').value
+        shippingOption: document.getElementById('shippingOption').value,
+        userId: currentUser ? currentUser.id : null
       };
 
       try {
         const res = await fetch('/api/orders/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...orderPayload, userId: localStorage.getItem('userId') || null })
+          body: JSON.stringify(orderPayload)
         });
 
         const data = await res.json();
 
         if (data.success) {
           document.getElementById('orderForm').reset();
+          if (currentUser) {
+            document.getElementById('clientName').value = currentUser.full_name;
+            document.getElementById('clientPhone').value = currentUser.phone;
+          }
           calculateTotal();
           
           document.getElementById('resCode').textContent = data.data.paymentCode;
           document.getElementById('resTotal').textContent = `$${data.data.totalToPay} USD`;
           document.getElementById('orderResult').classList.remove('hidden');
+
+          if (currentUser) {
+            fetchUserOrders();
+          }
         } else {
           alert(data.message || 'Erè nan kreyasyon kòmònd la.');
         }
@@ -246,6 +346,121 @@
         submitBtn.disabled = false;
         submitBtn.textContent = 'Voye Kòmònd la & Jeneré Kod Pèman';
       }
+    }
+
+    async function fetchUserOrders() {
+      if (!currentUser) return;
+      const listEl = document.getElementById('userOrdersList');
+
+      try {
+        const res = await fetch(`/api/users/${currentUser.id}/orders`);
+        const data = await res.json();
+
+        if (data.success && data.orders.length > 0) {
+          listEl.innerHTML = data.orders.map(o => `
+            <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+              <div>
+                <span class="font-mono font-bold text-emerald-400 block">${o.payment_code}</span>
+                <span class="text-slate-400 block">${o.store_platform} - $${parseFloat(o.estimated_price).toFixed(2)} USD</span>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${o.status === 'COMPLETED' ? 'bg-pink-950 text-pink-300' : 'bg-amber-950 text-amber-300'}">${o.status}</span>
+            </div>
+          `).join('');
+        } else {
+          listEl.innerHTML = '<p class="text-slate-500">Ou pa gen okenn kòmònd anrejistre pou kounye a.</p>';
+        }
+      } catch (e) {
+        listEl.innerHTML = '<p class="text-red-400">Erè nan chajman istorik la.</p>';
+      }
+    }
+
+    // AUTHENTICATION MODAL LOGIC
+    function openAuthModal(mode) {
+      document.getElementById('authModal').classList.remove('hidden');
+      switchAuthTab(mode);
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    function switchAuthTab(mode) {
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      const tabLoginBtn = document.getElementById('tabLoginBtn');
+      const tabRegisterBtn = document.getElementById('tabRegisterBtn');
+
+      if (mode === 'login') {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        tabLoginBtn.className = 'text-sm font-bold text-pink-500 border-b-2 border-pink-500 pb-1';
+        tabRegisterBtn.className = 'text-sm font-bold text-slate-400 pb-1';
+      } else {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+        tabRegisterBtn.className = 'text-sm font-bold text-emerald-400 border-b-2 border-emerald-400 pb-1';
+        tabLoginBtn.className = 'text-sm font-bold text-slate-400 pb-1';
+      }
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const phone = document.getElementById('loginPhone').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const res = await fetch('/api/users/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          currentUser = data.user;
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          updateUserUI();
+          closeAuthModal();
+        } else {
+          alert(data.message || 'Telefòn oubyen mot de passe pa korèk.');
+        }
+      } catch (err) {
+        alert('Erè nan koneksyon an.');
+      }
+    }
+
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('regName').value;
+      const phone = document.getElementById('regPhone').value;
+      const password = document.getElementById('regPassword').value;
+
+      try {
+        const res = await fetch('/api/users/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, phone, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          currentUser = data.user;
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          updateUserUI();
+          closeAuthModal();
+        } else {
+          alert(data.message || 'Erè nan enskripsyon an.');
+        }
+      } catch (err) {
+        alert('Erè nan enskripsyon an.');
+      }
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      localStorage.removeItem('currentUser');
+      document.getElementById('orderForm').reset();
+      updateUserUI();
     }
   </script>
 </body>

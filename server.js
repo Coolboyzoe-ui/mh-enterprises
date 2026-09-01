@@ -3,6 +3,8 @@ const express = require('express');
 const { Pool } = require('pg');
 const path = require('path');
 const twilio = require('twilio');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 const app = express();
 app.use(express.json());
@@ -138,10 +140,61 @@ app.get('/admin.html', (req, res) => {
 });
 
 // ----------------------------------------------------
+// AUTOMATED PRICE SCRAPER ENDPOINT
+// ----------------------------------------------------
+app.post('/api/parse-link', async (req, res) => {
+  const { url } = req.body;
+  if (!url) {
+    return res.status(400).json({ success: false, message: 'URL is required.' });
+  }
+
+  try {
+    const headers = {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+      'Accept-Language': 'en-US,en;q=0.9'
+    };
+
+    const response = await axios.get(url, { headers, timeout: 8000 });
+    const $ = cheerio.load(response.data);
+
+    let rawPrice = '';
+
+    // Selector order for standard Amazon product pages
+    const selectors = [
+      '.a-price .a-offscreen',
+      '#priceblock_ourprice',
+      '#priceblock_dealprice',
+      '.priceToPay .a-offscreen',
+      '#corePrice_feature_div .a-offscreen'
+    ];
+
+    for (const selector of selectors) {
+      const elText = $(selector).first().text().trim();
+      if (elText) {
+        rawPrice = elText;
+        break;
+      }
+    }
+
+    // Clean price string to extract numbers
+    const cleanMatch = rawPrice.replace(/[^0-9.]/g, '');
+    const priceFloat = parseFloat(cleanMatch);
+
+    if (!isNaN(priceFloat) && priceFloat > 0) {
+      return res.json({ success: true, price: priceFloat, shipping: 0.00 });
+    } else {
+      return res.json({ success: false, message: 'Could not extract exact price automatically.' });
+    }
+  } catch (err) {
+    console.error('❌ Parsing error:', err.message);
+    return res.json({ success: false, message: 'Scraping restriction or invalid URL.' });
+  }
+});
+
+// ----------------------------------------------------
 // USER AUTHENTICATION & PROFILE ENDPOINTS
 // ----------------------------------------------------
 
-// 1. Register User
 app.post('/api/users/register', async (req, res) => {
   const { fullName, phone, password } = req.body;
   
@@ -173,7 +226,6 @@ app.post('/api/users/register', async (req, res) => {
   }
 });
 
-// 2. Login User
 app.post('/api/users/login', async (req, res) => {
   const { phone, password } = req.body;
   if (!phone || !password) {
@@ -202,7 +254,6 @@ app.post('/api/users/login', async (req, res) => {
   }
 });
 
-// 3. Fetch User Order History
 app.get('/api/users/:userId/orders', async (req, res) => {
   const { userId } = req.params;
   try {
@@ -222,7 +273,6 @@ app.get('/api/users/:userId/orders', async (req, res) => {
 // ORDER & PAYMENT ENDPOINTS
 // ----------------------------------------------------
 
-// Create Order
 app.post('/api/orders/create', async (req, res) => {
   const { userId, clientName, clientPhone, storePlatform, itemUrl, estimatedPrice, shippingOption } = req.body;
 
@@ -278,10 +328,9 @@ app.post('/api/orders/create', async (req, res) => {
 });
 
 // ----------------------------------------------------
-// ADMIN ENDPOINTS (AUTO-SYNC COMPATIBLE)
+// ADMIN ENDPOINTS
 // ----------------------------------------------------
 
-// GET ALL ORDERS FOR ADMIN DASHBOARD
 app.get('/api/admin/orders', async (req, res) => {
   try {
     const query = `
@@ -298,10 +347,32 @@ app.get('/api/admin/orders', async (req, res) => {
   }
 });
 
-// UPDATE ORDER STATUS (FROM ADMIN ACTIONS)
+app.get('/api/admin/metrics', async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      "SELECT estimated_price FROM orders WHERE status IN ('PAID', 'PAID_PROCESSING', 'COMPLETED')"
+    );
+
+    const grossVolume = rows.reduce((sum, order) => sum + parseFloat(order.estimated_price || 0), 0);
+    const companyProfit = grossVolume * (10 / 110);
+    const baseProductCost = grossVolume - companyProfit;
+
+    return res.json({
+      success: true,
+      paidOrdersCount: rows.length,
+      grossVolumeUSD: grossVolume.toFixed(2),
+      companyProfitUSD: companyProfit.toFixed(2),
+      baseCostUSD: baseProductCost.toFixed(2)
+    });
+  } catch (err) {
+    console.error('❌ Admin Metrics Error:', err);
+    return res.status(500).json({ success: false, message: 'Error calculating metrics.' });
+  }
+});
+
 app.patch('/api/admin/orders/:id/status', async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body; // 'PAID' or 'COMPLETED'
+  const { status } = req.body;
 
   try {
     let updateQuery = `
@@ -336,7 +407,6 @@ app.patch('/api/admin/orders/:id/status', async (req, res) => {
 
     const updatedOrder = rows[0];
 
-    // Trigger WhatsApp Notification
     sendAutomatedWhatsApp(
       updatedOrder.client_phone,
       updatedOrder.client_name,
@@ -352,7 +422,28 @@ app.patch('/api/admin/orders/:id/status', async (req, res) => {
   }
 });
 
-// Search Order Code
+app.get('/api/admin/orders-log', async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM orders WHERE status IN ('PAID', 'PAID_PROCESSING', 'COMPLETED') ORDER BY created_at DESC"
+    );
+    
+    const grossVolume = rows.reduce((sum, order) => sum + parseFloat(order.estimated_price || 0), 0);
+    const companyProfit = grossVolume * (10 / 110);
+    
+    return res.json({ 
+      success: true, 
+      count: rows.length,
+      grossVolumeUSD: grossVolume.toFixed(2),
+      companyProfitUSD: companyProfit.toFixed(2),
+      data: rows 
+    });
+  } catch (err) {
+    console.error('Error fetching order log:', err);
+    return res.status(500).json({ success: false, message: 'Database query failed.' });
+  }
+});
+
 app.get('/api/admin/orders/:code', async (req, res) => {
   const { code } = req.params;
   try {
