@@ -18,10 +18,8 @@
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col items-center font-sans selection:bg-pink-600 selection:text-white">
 
-  <!-- TOP ACCENT STRIPE (Haitian Flag Blue & Red) -->
   <div class="h-1.5 w-full bg-gradient-to-r from-[#00209F] via-[#00209F] to-[#D21034]"></div>
 
-  <!-- ADMIN NAVBAR -->
   <header class="w-full bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 py-6 px-6 flex justify-between items-center shadow-xl">
     <div>
       <div class="flex items-center gap-3">
@@ -40,7 +38,7 @@
     </div>
 
     <div class="flex items-center gap-4">
-      <button onclick="loadAdminOrders(false)" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-slate-200 font-bold px-4 py-2 rounded-xl transition flex items-center gap-2">
+      <button onclick="loadAdminData(false)" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-slate-200 font-bold px-4 py-2 rounded-xl transition flex items-center gap-2">
         <span>🔄 Rafrachi</span>
       </button>
       <div class="text-right border-l border-slate-800 pl-4 hidden md:block">
@@ -50,37 +48,49 @@
     </div>
   </header>
 
-  <!-- MAIN ADMIN CONTENT -->
   <main class="w-full max-w-7xl p-4 md:p-8 space-y-6">
 
-    <!-- SEARCH & METRICS BAR -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <!-- Search Input -->
-      <div class="md:col-span-2 bg-slate-950/70 backdrop-blur-xl p-4 rounded-2xl border border-slate-800 shadow-lg flex items-center gap-3">
-        <span class="text-slate-400">🔍</span>
-        <input type="text" id="searchInput" oninput="filterOrders()" placeholder="Chèche pa Kod Pèman (MHE-XXXXXX) oubyen Telefòn..." class="w-full bg-transparent text-sm text-white focus:outline-none">
-      </div>
-
-      <!-- Stat Card 1 -->
-      <div class="bg-slate-950/70 backdrop-blur-xl p-4 rounded-2xl border border-slate-800 shadow-lg flex justify-between items-center">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <div class="bg-slate-950/70 backdrop-blur-xl p-5 rounded-2xl border border-slate-800 shadow-lg flex justify-between items-center">
         <div>
           <p class="text-xs text-slate-400 uppercase font-semibold">An Attant Pèman</p>
-          <p class="text-2xl font-black text-amber-400" id="statPending">0</p>
+          <p class="text-2xl font-black text-amber-400 mt-1" id="statPending">0</p>
         </div>
-        <span class="text-2xl">⏳</span>
+        <span class="text-3xl">⏳</span>
       </div>
 
-      <!-- Stat Card 2 -->
-      <div class="bg-slate-950/70 backdrop-blur-xl p-4 rounded-2xl border border-slate-800 shadow-lg flex justify-between items-center">
+      <div class="bg-slate-950/70 backdrop-blur-xl p-5 rounded-2xl border border-slate-800 shadow-lg flex justify-between items-center">
         <div>
           <p class="text-xs text-slate-400 uppercase font-semibold">Kòmònd Fini</p>
-          <p class="text-2xl font-black text-emerald-400" id="statCompleted">0</p>
+          <p class="text-2xl font-black text-emerald-400 mt-1" id="statCompleted">0</p>
         </div>
-        <span class="text-2xl">✅</span>
+        <span class="text-3xl">✅</span>
       </div>
+
+      <div class="bg-slate-950/70 backdrop-blur-xl p-5 rounded-2xl border border-slate-800 shadow-lg flex justify-between items-center">
+        <div>
+          <p class="text-xs text-slate-400 uppercase font-semibold">Vant Total (Brut)</p>
+          <p class="text-2xl font-black text-blue-400 mt-1" id="statGrossRevenue">$0.00</p>
+        </div>
+        <span class="text-3xl">💵</span>
+      </div>
+
+      <div class="bg-slate-950/70 backdrop-blur-xl p-5 rounded-2xl border border-emerald-500/30 bg-emerald-950/10 shadow-lg flex justify-between items-center">
+        <div>
+          <p class="text-xs text-emerald-400 uppercase font-semibold">Gai Konpayi (10%)</p>
+          <p class="text-2xl font-black text-emerald-400 mt-1" id="statCompanyProfit">$0.00</p>
+        </div>
+        <span class="text-3xl">💰</span>
+      </div>
+
     </div>
 
-    <!-- ORDERS TABLE CONTAINER -->
+    <div class="bg-slate-950/70 backdrop-blur-xl p-4 rounded-2xl border border-slate-800 shadow-lg flex items-center gap-3">
+      <span class="text-slate-400">🔍</span>
+      <input type="text" id="searchInput" oninput="filterOrders()" placeholder="Chèche pa Kod Pèman (MHE-XXXXXX), Non Kliyan, oubyen Telefòn..." class="w-full bg-transparent text-sm text-white focus:outline-none">
+    </div>
+
     <div class="bg-slate-950/70 backdrop-blur-xl rounded-2xl border border-slate-800 shadow-2xl overflow-hidden">
       <div class="p-5 border-b border-slate-800 flex justify-between items-center">
         <h2 class="text-lg font-bold text-white">List Tout Kòmònd yo</h2>
@@ -95,13 +105,14 @@
               <th class="p-4">Kliyan / Telefòn</th>
               <th class="p-4">Boutik & Lyen</th>
               <th class="p-4">Prix Total ($)</th>
+              <th class="p-4">Frè Konpayi (10%)</th>
               <th class="p-4">Statut</th>
               <th class="p-4 text-center">Aksyon</th>
             </tr>
           </thead>
           <tbody id="adminOrdersTable" class="divide-y divide-slate-800/60">
             <tr>
-              <td colspan="6" class="p-8 text-center text-slate-400">N ap chaje kòmònd yo...</td>
+              <td colspan="7" class="p-8 text-center text-slate-400">N ap chaje kòmònd yo...</td>
             </tr>
           </tbody>
         </table>
@@ -115,16 +126,15 @@
     let adminSyncInterval = null;
 
     window.onload = () => {
-      // Load orders immediately on start
-      loadAdminOrders(false);
+      loadAdminData(false);
 
-      // Start auto-sync interval every 3 seconds across all devices (PC & Phone)
+      // Start automatic polling every 3 seconds across devices
       adminSyncInterval = setInterval(() => {
-        loadAdminOrders(true);
+        loadAdminData(true);
       }, 3000);
     };
 
-    async function loadAdminOrders(isBackgroundSync = false) {
+    async function loadAdminData(isBackgroundSync = false) {
       const tableBody = document.getElementById('adminOrdersTable');
 
       try {
@@ -134,23 +144,19 @@
         if (data.success) {
           allOrders = data.orders;
           
-          // Update Statistics
           updateMetrics(allOrders);
-          
-          // Render Table Rows
           renderOrdersTable(allOrders);
 
-          // Update Sync Timestamp
           const now = new Date();
           document.getElementById('lastSyncTime').textContent = `Sinkronize: ${now.toLocaleTimeString()}`;
         } else {
           if (!isBackgroundSync) {
-            tableBody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-400">Erè nan chajman kòmònd yo.</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-400">Erè nan chajman kòmònd yo.</td></tr>';
           }
         }
       } catch (err) {
         if (!isBackgroundSync) {
-          tableBody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-400">Erè koneksyon ak sèvè a.</td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-400">Erè koneksyon ak sèvè a.</td></tr>';
         }
       }
     }
@@ -159,12 +165,13 @@
       const tableBody = document.getElementById('adminOrdersTable');
 
       if (orders.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400">Pa gen okenn kòmònd disponib.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-slate-400">Pa gen okenn kòmònd disponib.</td></tr>';
         return;
       }
 
       const newHTML = orders.map(order => {
         const totalPrice = parseFloat(order.estimated_price) || 0;
+        const companyFee = totalPrice * (10 / 110);
         
         let statusBadge = '';
         let actionButtons = '';
@@ -205,24 +212,29 @@
               <a href="${order.item_url}" target="_blank" class="text-xs text-pink-400 hover:underline max-w-xs truncate block">${order.item_url}</a>
             </td>
             <td class="p-4 font-bold text-white">$${totalPrice.toFixed(2)}</td>
+            <td class="p-4 font-bold text-emerald-400">+$${companyFee.toFixed(2)}</td>
             <td class="p-4">${statusBadge}</td>
             <td class="p-4 text-center">${actionButtons}</td>
           </tr>
         `;
       }).join('');
 
-      // Avoid DOM flickering if order states have not changed
       if (tableBody.innerHTML !== newHTML) {
         tableBody.innerHTML = newHTML;
       }
     }
 
     function updateMetrics(orders) {
-      const pendingCount = orders.filter(o => o.status === 'PENDING').length;
-      const completedCount = orders.filter(o => o.status === 'COMPLETED' || o.status === 'PAID' || o.status === 'PAID_PROCESSING').length;
+      const pendingOrders = orders.filter(o => o.status === 'PENDING' || o.status === 'PENDING_PHYSICAL_PAYMENT');
+      const paidOrders = orders.filter(o => o.status === 'PAID' || o.status === 'PAID_PROCESSING' || o.status === 'COMPLETED');
 
-      document.getElementById('statPending').textContent = pendingCount;
-      document.getElementById('statCompleted').textContent = completedCount;
+      const grossVolume = paidOrders.reduce((sum, o) => sum + (parseFloat(o.estimated_price) || 0), 0);
+      const companyProfit = grossVolume * (10 / 110);
+
+      document.getElementById('statPending').textContent = pendingOrders.length;
+      document.getElementById('statCompleted').textContent = orders.filter(o => o.status === 'COMPLETED').length;
+      document.getElementById('statGrossRevenue').textContent = `$${grossVolume.toFixed(2)} USD`;
+      document.getElementById('statCompanyProfit').textContent = `$${companyProfit.toFixed(2)} USD`;
     }
 
     function filterOrders() {
@@ -247,8 +259,7 @@
         const data = await res.json();
 
         if (data.success) {
-          // Immediately trigger background refresh to sync all views
-          loadAdminOrders(true);
+          loadAdminData(true);
         } else {
           alert(data.message || 'Erè nan chanjman statu a.');
         }
