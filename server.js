@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Initialize Twilio client (Optional: fallback mode if credentials aren't configured yet)
+// Initialize Twilio client
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioWhatsappNumber = process.env.TWILIO_WHATSAPP_NUMBER || 'whatsapp:+14155238886';
@@ -64,7 +64,7 @@ const initDb = async () => {
         item_url TEXT NOT NULL,
         estimated_price NUMERIC(10, 2) NOT NULL,
         shipping_option VARCHAR(100) DEFAULT 'Air Cargo',
-        status VARCHAR(50) DEFAULT 'PENDING_PHYSICAL_PAYMENT',
+        status VARCHAR(50) DEFAULT 'PENDING',
         processed_by VARCHAR(100),
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         paid_at TIMESTAMP WITH TIME ZONE,
@@ -101,7 +101,6 @@ async function sendAutomatedWhatsApp(clientPhone, clientName, paymentCode, price
     return;
   }
 
-  // Format phone number to international format if necessary
   let cleanPhone = clientPhone.replace(/[^0-9]/g, '');
   if (!cleanPhone.startsWith('1') && cleanPhone.length === 10) {
     cleanPhone = `1${cleanPhone}`;
@@ -243,7 +242,7 @@ app.post('/api/orders/create', async (req, res) => {
 
     const query = `
       INSERT INTO orders (user_id, payment_code, client_name, client_phone, store_platform, item_url, estimated_price, shipping_option, status)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'PENDING_PHYSICAL_PAYMENT')
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'PENDING')
       RETURNING *;
     `;
     const values = [
@@ -278,7 +277,82 @@ app.post('/api/orders/create', async (req, res) => {
   }
 });
 
-// Admin: Search Order Code
+// ----------------------------------------------------
+// ADMIN ENDPOINTS (AUTO-SYNC COMPATIBLE)
+// ----------------------------------------------------
+
+// GET ALL ORDERS FOR ADMIN DASHBOARD
+app.get('/api/admin/orders', async (req, res) => {
+  try {
+    const query = `
+      SELECT orders.*, users.full_name, users.phone 
+      FROM orders 
+      LEFT JOIN users ON orders.user_id = users.id 
+      ORDER BY orders.created_at DESC;
+    `;
+    const { rows } = await pool.query(query);
+    return res.json({ success: true, orders: rows });
+  } catch (err) {
+    console.error('❌ Admin Fetch Orders Error:', err);
+    return res.status(500).json({ success: false, message: 'Erè koneksyon ak sèvè a.' });
+  }
+});
+
+// UPDATE ORDER STATUS (FROM ADMIN ACTIONS)
+app.patch('/api/admin/orders/:id/status', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body; // 'PAID' or 'COMPLETED'
+
+  try {
+    let updateQuery = `
+      UPDATE orders 
+      SET status = $1 
+      WHERE id = $2 
+      RETURNING *;
+    `;
+
+    if (status === 'PAID') {
+      updateQuery = `
+        UPDATE orders 
+        SET status = 'PAID_PROCESSING', paid_at = NOW() 
+        WHERE id = $1 
+        RETURNING *;
+      `;
+    } else if (status === 'COMPLETED') {
+      updateQuery = `
+        UPDATE orders 
+        SET status = 'COMPLETED', completed_at = NOW() 
+        WHERE id = $1 
+        RETURNING *;
+      `;
+    }
+
+    const values = status === 'PAID' || status === 'COMPLETED' ? [id] : [status, id];
+    const { rows } = await pool.query(updateQuery, values);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Order not found.' });
+    }
+
+    const updatedOrder = rows[0];
+
+    // Trigger WhatsApp Notification
+    sendAutomatedWhatsApp(
+      updatedOrder.client_phone,
+      updatedOrder.client_name,
+      updatedOrder.payment_code,
+      updatedOrder.estimated_price,
+      updatedOrder.status === 'COMPLETED'
+    );
+
+    return res.json({ success: true, order: updatedOrder });
+  } catch (err) {
+    console.error('❌ Admin Status Update Error:', err);
+    return res.status(500).json({ success: false, message: 'Error updating order status.' });
+  }
+});
+
+// Search Order Code
 app.get('/api/admin/orders/:code', async (req, res) => {
   const { code } = req.params;
   try {
@@ -289,116 +363,6 @@ app.get('/api/admin/orders/:code', async (req, res) => {
     return res.json({ success: true, data: rows[0] });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Server error searching order.' });
-  }
-});
-
-// Admin: Confirm Payment & Auto-Send WhatsApp Message
-app.post('/api/admin/verify-payment', async (req, res) => {
-  const { paymentCode, agentId } = req.body;
-
-  try {
-    const checkQuery = 'SELECT * FROM orders WHERE payment_code = $1';
-    const { rows } = await pool.query(checkQuery, [paymentCode.toUpperCase()]);
-
-    if (rows.length === 0) {
-      return res.status(404).json({ success: false, message: 'Code not found.' });
-    }
-
-    const order = rows[0];
-    if (order.status === 'PAID_PROCESSING') {
-      return res.status(400).json({ success: false, message: 'This code was already processed.' });
-    }
-
-    const updateQuery = `
-      UPDATE orders 
-      SET status = 'PAID_PROCESSING', paid_at = NOW(), processed_by = $1 
-      WHERE payment_code = $2 
-      RETURNING *;
-    `;
-    const updated = await pool.query(updateQuery, [agentId || 'AGENT-MAIN', paymentCode.toUpperCase()]);
-    const paidOrder = updated.rows[0];
-
-    // AUTOMATIC WHATSAPP TRANSMISSION (Payment Received)
-    sendAutomatedWhatsApp(
-      paidOrder.client_phone,
-      paidOrder.client_name,
-      paidOrder.payment_code,
-      paidOrder.estimated_price,
-      false
-    );
-
-    return res.json({
-      success: true,
-      message: 'Payment confirmed! Automated confirmation queued for dispatch.',
-      data: paidOrder
-    });
-  } catch (err) {
-    return res.status(500).json({ success: false, message: 'Server error verifying payment.' });
-  }
-});
-
-// Admin: Complete Order & Send Final Notification
-app.post('/api/admin/complete-order', async (req, res) => {
-  const { paymentCode, phone } = req.body;
-
-  if (!paymentCode) {
-    return res.status(400).json({ success: false, message: 'Payment code is required.' });
-  }
-
-  try {
-    const updateQuery = `
-      UPDATE orders 
-      SET status = 'COMPLETED', completed_at = NOW() 
-      WHERE payment_code = $1 
-      RETURNING *;
-    `;
-    const { rows } = await pool.query(updateQuery, [paymentCode.toUpperCase()]);
-
-    if (rows.length === 0) {
-      return res.status(404).json({ success: false, message: 'Order code not found.' });
-    }
-
-    const completedOrder = rows[0];
-    const targetPhone = phone || completedOrder.client_phone;
-
-    // AUTOMATIC WHATSAPP TRANSMISSION (Order Completed)
-    sendAutomatedWhatsApp(
-      targetPhone,
-      completedOrder.client_name,
-      completedOrder.payment_code,
-      completedOrder.estimated_price,
-      true
-    );
-
-    return res.json({
-      success: true,
-      message: `Order #${paymentCode} marked as COMPLETED and notification sent.`,
-      data: completedOrder
-    });
-  } catch (err) {
-    console.error('❌ Complete Order Error:', err);
-    return res.status(500).json({ success: false, message: 'Error marking order as complete.' });
-  }
-});
-
-// Admin: Orders & Revenue Log
-app.get('/api/admin/orders-log', async (req, res) => {
-  try {
-    const { rows } = await pool.query(
-      "SELECT * FROM orders WHERE status IN ('PAID_PROCESSING', 'COMPLETED') ORDER BY created_at DESC"
-    );
-    
-    const totalRevenue = rows.reduce((sum, order) => sum + parseFloat(order.estimated_price || 0), 0);
-    
-    return res.json({ 
-      success: true, 
-      count: rows.length,
-      totalRevenue: totalRevenue.toFixed(2),
-      data: rows 
-    });
-  } catch (err) {
-    console.error('Error fetching order log:', err);
-    return res.status(500).json({ success: false, message: 'Database query failed.' });
   }
 });
 
