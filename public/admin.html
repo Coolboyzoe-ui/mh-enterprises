@@ -1,365 +1,259 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ht">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MH Enterprises - Admin Verification Portal</title>
+  <title>MH Enterprises - Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #030712;
+      background-image: 
+        radial-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px),
+        radial-gradient(rgba(244, 114, 182, 0.1) 1px, transparent 1px);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center p-4 md:p-8">
+<body class="text-slate-100 min-h-screen flex flex-col items-center font-sans selection:bg-pink-600 selection:text-white">
 
-  <div class="w-full max-w-5xl space-y-6">
+  <!-- TOP ACCENT STRIPE (Haitian Flag Blue & Red) -->
+  <div class="h-1.5 w-full bg-gradient-to-r from-[#00209F] via-[#00209F] to-[#D21034]"></div>
 
-    <!-- ADMIN HEADER -->
-    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 flex justify-between items-center shadow-xl">
-      <div>
+  <!-- ADMIN NAVBAR -->
+  <header class="w-full bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 py-6 px-6 flex justify-between items-center shadow-xl">
+    <div>
+      <div class="flex items-center gap-3">
         <h1 class="text-2xl font-black text-white tracking-wide">MH ENTERPRISES</h1>
-        <p class="text-xs text-slate-400">Agent Payment Verification Dashboard</p>
-      </div>
-      <span class="bg-blue-950 text-blue-400 border border-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase">
-        Admin Portal
-      </span>
-    </div>
-
-    <!-- GLOBAL OVERVIEW STATS CARDS -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
-        <p class="text-xs font-semibold text-slate-400 uppercase">Total Orders</p>
-        <h2 id="totalOrdersStat" class="text-2xl font-black text-white mt-1">0</h2>
-      </div>
-
-      <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
-        <p class="text-xs font-semibold text-slate-400 uppercase">Total Revenue Collected</p>
-        <h2 id="totalRevenueStat" class="text-2xl font-black text-white mt-1">$0.00</h2>
-      </div>
-
-      <div class="bg-slate-900 p-5 rounded-2xl border border-emerald-800/40 shadow-xl">
-        <p class="text-xs font-semibold text-emerald-400 uppercase">Admin Profit Gain</p>
-        <h2 id="totalProfitStat" class="text-2xl font-black text-emerald-400 mt-1">$0.00</h2>
-      </div>
-
-      <div class="bg-slate-900 p-5 rounded-2xl border border-blue-800/40 shadow-xl">
-        <p class="text-xs font-semibold text-blue-400 uppercase">Profit Percentage</p>
-        <h2 id="totalProfitPercentStat" class="text-2xl font-black text-blue-400 mt-1">10.0%</h2>
-      </div>
-    </div>
-
-    <!-- TIME PERIOD PROFIT BREAKDOWN -->
-    <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4">
-      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-        <h2 class="text-base font-bold text-emerald-400 flex items-center gap-2">
-          <span>📈</span> <span>Profit Gain Breakdown (By Time Period)</span>
-        </h2>
-        <span class="text-xs text-slate-400">10% Company Fee</span>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-          <p class="text-xs font-semibold text-slate-500 uppercase">Today</p>
-          <p id="profitDay" class="text-xl font-black text-emerald-400 mt-1">$0.00</p>
-        </div>
-
-        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-          <p class="text-xs font-semibold text-slate-500 uppercase">This Week</p>
-          <p id="profitWeek" class="text-xl font-black text-emerald-400 mt-1">$0.00</p>
-        </div>
-
-        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-          <p class="text-xs font-semibold text-slate-500 uppercase">This Month</p>
-          <p id="profitMonth" class="text-xl font-black text-emerald-400 mt-1">$0.00</p>
-        </div>
-
-        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-          <p class="text-xs font-semibold text-slate-500 uppercase">This Year</p>
-          <p id="profitYear" class="text-xl font-black text-emerald-400 mt-1">$0.00</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SEARCH & ACTION CARD -->
-    <div class="bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-800 shadow-xl space-y-4">
-      <h2 class="text-lg font-bold text-white border-b border-slate-800 pb-3">Verify & Manage Order</h2>
-
-      <div class="flex gap-3">
-        <input type="text" id="searchCodeInput" placeholder="Enter Payment Code (e.g. MHE-8X29KL)" class="uppercase tracking-widest font-mono text-lg w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button onclick="searchPaymentCode()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl transition flex-shrink-0">
-          Search
-        </button>
-      </div>
-    </div>
-
-    <!-- SEARCH RESULT ACTION CARD -->
-    <div id="searchResultCard" class="hidden bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-800 shadow-xl space-y-6">
-      <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-        <div>
-          <span id="cardPaymentCode" class="text-2xl font-black font-mono text-emerald-400">MHE-XXXXXX</span>
-          <p id="cardClientName" class="text-sm text-slate-400">Client Name</p>
-        </div>
-        <span id="cardStatusBadge" class="text-xs font-bold px-3 py-1 rounded-full uppercase">
-          Status
+        <span class="bg-red-950 text-red-400 border border-red-800 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">
+          Admin Panel
         </span>
       </div>
+      <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-2">
+        <span>Jesyon Kòmònd ak Pèman an Dirèk</span>
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" title="Sinkronizasyon an dirèk aktive"></span>
+        </span>
+      </p>
+    </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm bg-slate-950 p-4 rounded-xl border border-slate-800">
-        <div>
-          <p class="text-xs text-slate-500">Product Cost</p>
-          <p id="cardProductCost" class="font-semibold text-white">$0.00</p>
-        </div>
-        <div>
-          <p class="text-xs text-emerald-500">Admin Profit (10%)</p>
-          <p id="cardProfitPrice" class="font-bold text-emerald-400">$0.00</p>
-        </div>
-        <div>
-          <p class="text-xs text-slate-500">Total Collected</p>
-          <p id="cardTotalPrice" class="font-bold text-white">$0.00</p>
-        </div>
-        <div>
-          <p class="text-xs text-slate-500">Client Phone</p>
-          <p id="cardPhone" class="font-semibold text-white">-</p>
-        </div>
+    <div class="flex items-center gap-4">
+      <button onclick="loadAdminOrders(false)" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs text-slate-200 font-bold px-4 py-2 rounded-xl transition flex items-center gap-2">
+        <span>🔄 Rafrachi</span>
+      </button>
+      <div class="text-right border-l border-slate-800 pl-4 hidden md:block">
+        <span class="block text-xs font-bold text-slate-200" id="adminUserDisplay">Administratè</span>
+        <span class="block text-[10px] text-emerald-400">● Sèvè Konekte</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN ADMIN CONTENT -->
+  <main class="w-full max-w-7xl p-4 md:p-8 space-y-6">
+
+    <!-- SEARCH & METRICS BAR -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <!-- Search Input -->
+      <div class="md:col-span-2 bg-slate-950/70 backdrop-blur-xl p-4 rounded-2xl border border-slate-800 shadow-lg flex items-center gap-3">
+        <span class="text-slate-400">🔍</span>
+        <input type="text" id="searchInput" oninput="filterOrders()" placeholder="Chèche pa Kod Pèman (MHE-XXXXXX) oubyen Telefòn..." class="w-full bg-transparent text-sm text-white focus:outline-none">
       </div>
 
-      <div class="space-y-1">
-        <p class="text-xs text-slate-500">Product Link:</p>
-        <a id="cardProductUrl" href="#" target="_blank" class="text-sm text-blue-400 hover:underline break-all block">URL</a>
+      <!-- Stat Card 1 -->
+      <div class="bg-slate-950/70 backdrop-blur-xl p-4 rounded-2xl border border-slate-800 shadow-lg flex justify-between items-center">
+        <div>
+          <p class="text-xs text-slate-400 uppercase font-semibold">An Attant Pèman</p>
+          <p class="text-2xl font-black text-amber-400" id="statPending">0</p>
+        </div>
+        <span class="text-2xl">⏳</span>
       </div>
 
-      <div class="flex gap-3">
-        <button id="confirmBtn" onclick="confirmPayment()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-emerald-600/20">
-          Confirm Payment
-        </button>
-
-        <button id="completeBtn" onclick="completeOrder()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-600/20 hidden">
-          Complete Order & Notify Client
-        </button>
+      <!-- Stat Card 2 -->
+      <div class="bg-slate-950/70 backdrop-blur-xl p-4 rounded-2xl border border-slate-800 shadow-lg flex justify-between items-center">
+        <div>
+          <p class="text-xs text-slate-400 uppercase font-semibold">Kòmònd Fini</p>
+          <p class="text-2xl font-black text-emerald-400" id="statCompleted">0</p>
+        </div>
+        <span class="text-2xl">✅</span>
       </div>
     </div>
 
-    <!-- PROCESSED ORDERS LOG TABLE -->
-    <div class="bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-800 shadow-xl space-y-4">
-      <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-        <h2 class="text-lg font-bold text-white">Orders Processing Log</h2>
-        <button onclick="loadOrdersLog()" class="text-xs text-blue-400 hover:text-blue-300 font-semibold">🔄 Refresh Log</button>
+    <!-- ORDERS TABLE CONTAINER -->
+    <div class="bg-slate-950/70 backdrop-blur-xl rounded-2xl border border-slate-800 shadow-2xl overflow-hidden">
+      <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+        <h2 class="text-lg font-bold text-white">List Tout Kòmònd yo</h2>
+        <span class="text-xs text-slate-400" id="lastSyncTime">Sinkronize: Koulye a</span>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead class="text-xs uppercase bg-slate-950 text-slate-400 border-b border-slate-800">
-            <tr>
-              <th class="py-3 px-4">Code</th>
-              <th class="py-3 px-4">Client</th>
-              <th class="py-3 px-4">Phone</th>
-              <th class="py-3 px-4">Product Cost</th>
-              <th class="py-3 px-4 text-emerald-400">Profit (10%)</th>
-              <th class="py-3 px-4">Total Collected</th>
-              <th class="py-3 px-4">Status</th>
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-slate-900/90 text-slate-400 border-b border-slate-800 text-xs uppercase font-semibold">
+              <th class="p-4">Kod Pèman</th>
+              <th class="p-4">Kliyan / Telefòn</th>
+              <th class="p-4">Boutik & Lyen</th>
+              <th class="p-4">Prix Total ($)</th>
+              <th class="p-4">Statut</th>
+              <th class="p-4 text-center">Aksyon</th>
             </tr>
           </thead>
-          <tbody id="logTableBody" class="divide-y divide-slate-800 text-slate-300">
+          <tbody id="adminOrdersTable" class="divide-y divide-slate-800/60">
             <tr>
-              <td colspan="7" class="text-center py-6 text-slate-500">Loading orders log...</td>
+              <td colspan="6" class="p-8 text-center text-slate-400">N ap chaje kòmònd yo...</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-  </div>
+  </main>
 
   <script>
-    let activeSearchCode = null;
-    let activeClientPhone = null;
+    let allOrders = [];
+    let adminSyncInterval = null;
 
     window.onload = () => {
-      loadOrdersLog();
+      // Load orders immediately on start
+      loadAdminOrders(false);
+
+      // Start auto-sync interval every 3 seconds across all devices (PC & Phone)
+      adminSyncInterval = setInterval(() => {
+        loadAdminOrders(true);
+      }, 3000);
     };
 
-    async function searchPaymentCode() {
-      const input = document.getElementById('searchCodeInput').value.trim();
-      if (!input) return alert('Please enter a payment code.');
+    async function loadAdminOrders(isBackgroundSync = false) {
+      const tableBody = document.getElementById('adminOrdersTable');
 
       try {
-        const res = await fetch(`/api/admin/orders/${input}`);
+        const res = await fetch('/api/admin/orders');
         const data = await res.json();
 
         if (data.success) {
-          const order = data.data;
-          activeSearchCode = order.payment_code;
-          activeClientPhone = order.client_phone;
-
-          const totalAmount = parseFloat(order.estimated_price);
-          const baseCost = totalAmount / 1.10;
-          const profit = totalAmount - baseCost;
-
-          document.getElementById('cardPaymentCode').textContent = order.payment_code;
-          document.getElementById('cardClientName').textContent = order.client_name;
-          document.getElementById('cardPhone').textContent = order.client_phone;
-          document.getElementById('cardProductCost').textContent = `$${baseCost.toFixed(2)}`;
-          document.getElementById('cardProfitPrice').textContent = `$${profit.toFixed(2)}`;
-          document.getElementById('cardTotalPrice').textContent = `$${totalAmount.toFixed(2)}`;
-          document.getElementById('cardProductUrl').href = order.item_url;
-          document.getElementById('cardProductUrl').textContent = order.item_url;
-
-          const badge = document.getElementById('cardStatusBadge');
-          const confirmBtn = document.getElementById('confirmBtn');
-          const completeBtn = document.getElementById('completeBtn');
-
-          if (order.status === 'COMPLETED') {
-            badge.className = "text-xs font-bold px-3 py-1 rounded-full uppercase bg-blue-950 text-blue-400 border border-blue-800";
-            badge.textContent = "COMPLETED";
-            confirmBtn.classList.add('hidden');
-            completeBtn.classList.remove('hidden');
-            completeBtn.disabled = true;
-            completeBtn.className = "w-full bg-slate-800 text-slate-500 font-bold py-3.5 rounded-xl cursor-not-allowed";
-            completeBtn.textContent = "Order Fully Completed";
-          } else if (order.status === 'PAID_PROCESSING') {
-            badge.className = "text-xs font-bold px-3 py-1 rounded-full uppercase bg-emerald-950 text-emerald-400 border border-emerald-800";
-            badge.textContent = "PAID & PROCESSING";
-            confirmBtn.classList.add('hidden');
-            completeBtn.classList.remove('hidden');
-            completeBtn.disabled = false;
-            completeBtn.className = "w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-600/20";
-            completeBtn.textContent = "Mark Complete & Send SMS/WhatsApp Notification";
-          } else {
-            badge.className = "text-xs font-bold px-3 py-1 rounded-full uppercase bg-amber-950 text-amber-400 border border-amber-800";
-            badge.textContent = "PENDING PAYMENT";
-            confirmBtn.classList.remove('hidden');
-            completeBtn.classList.add('hidden');
-          }
-
-          document.getElementById('searchResultCard').classList.remove('hidden');
-        } else {
-          alert(data.message || 'Payment code not found.');
-          document.getElementById('searchResultCard').classList.add('hidden');
-        }
-      } catch (err) {
-        alert('Server connection error searching code.');
-      }
-    }
-
-    async function confirmPayment() {
-      if (!activeSearchCode) return;
-
-      try {
-        const res = await fetch('/api/admin/verify-payment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentCode: activeSearchCode, agentId: 'AGENT-ADMIN' })
-        });
-
-        const data = await res.json();
-
-        if (data.success) {
-          alert('Payment confirmed! Order set to Paid & Processing.');
-          searchPaymentCode();
-          loadOrdersLog();
-        } else {
-          alert(data.message || 'Verification failed.');
-        }
-      } catch (err) {
-        alert('Server error verifying payment.');
-      }
-    }
-
-    async function completeOrder() {
-      if (!activeSearchCode) return;
-
-      try {
-        const res = await fetch('/api/admin/complete-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentCode: activeSearchCode, phone: activeClientPhone })
-        });
-
-        const data = await res.json();
-
-        if (data.success) {
-          alert(`Order #${activeSearchCode} marked as COMPLETE!\n\nAutomated message sent to client's index dashboard and phone number (${activeClientPhone}).`);
-          searchPaymentCode();
-          loadOrdersLog();
-        } else {
-          alert(data.message || 'Failed to complete order.');
-        }
-      } catch (err) {
-        alert('Server error completing order.');
-      }
-    }
-
-    async function loadOrdersLog() {
-      try {
-        const res = await fetch('/api/admin/orders-log');
-        const data = await res.json();
-
-        if (data.success) {
-          const rows = data.data;
+          allOrders = data.orders;
           
-          let totalRevenue = 0;
-          let totalProfit = 0;
-          let dayProfit = 0;
-          let weekProfit = 0;
-          let monthProfit = 0;
-          let yearProfit = 0;
+          // Update Statistics
+          updateMetrics(allOrders);
+          
+          // Render Table Rows
+          renderOrdersTable(allOrders);
 
+          // Update Sync Timestamp
           const now = new Date();
-          const todayStr = now.toDateString();
-          const currentMonth = now.getMonth();
-          const currentYear = now.getFullYear();
-
-          if (rows.length === 0) {
-            document.getElementById('logTableBody').innerHTML = `
-              <tr><td colspan="7" class="text-center py-6 text-slate-500">No verified payments logged yet.</td></tr>
-            `;
-          } else {
-            document.getElementById('logTableBody').innerHTML = rows.map(order => {
-              const total = parseFloat(order.estimated_price);
-              const baseCost = total / 1.10;
-              const profit = total - baseCost;
-
-              totalRevenue += total;
-              totalProfit += profit;
-
-              const orderDate = new Date(order.paid_at || order.created_at);
-
-              // Cumulative Periods
-              if (orderDate.toDateString() === todayStr) dayProfit += profit;
-              if ((now - orderDate) / (1000 * 60 * 60 * 24) <= 7) weekProfit += profit;
-              if (orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear) monthProfit += profit;
-              if (orderDate.getFullYear() === currentYear) yearProfit += profit;
-
-              let statusBadge = `<span class="text-xs px-2 py-0.5 rounded font-semibold bg-amber-950 text-amber-400 border border-amber-800">PENDING</span>`;
-              if (order.status === 'COMPLETED') {
-                statusBadge = `<span class="text-xs px-2 py-0.5 rounded font-semibold bg-blue-950 text-blue-400 border border-blue-800">COMPLETED</span>`;
-              } else if (order.status === 'PAID_PROCESSING') {
-                statusBadge = `<span class="text-xs px-2 py-0.5 rounded font-semibold bg-emerald-950 text-emerald-400 border border-emerald-800">PROCESSING</span>`;
-              }
-
-              return `
-                <tr class="hover:bg-slate-900/50">
-                  <td class="py-3 px-4 font-mono font-bold text-emerald-400">${order.payment_code}</td>
-                  <td class="py-3 px-4 font-semibold text-white">${order.client_name}</td>
-                  <td class="py-3 px-4 text-slate-400">${order.client_phone}</td>
-                  <td class="py-3 px-4 text-slate-400">$${baseCost.toFixed(2)}</td>
-                  <td class="py-3 px-4 font-bold text-emerald-400">$${profit.toFixed(2)}</td>
-                  <td class="py-3 px-4 font-bold text-white">$${total.toFixed(2)}</td>
-                  <td class="py-3 px-4">${statusBadge}</td>
-                </tr>
-              `;
-            }).join('');
+          document.getElementById('lastSyncTime').textContent = `Sinkronize: ${now.toLocaleTimeString()}`;
+        } else {
+          if (!isBackgroundSync) {
+            tableBody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-400">Erè nan chajman kòmònd yo.</td></tr>';
           }
-
-          // Global Totals
-          document.getElementById('totalOrdersStat').textContent = rows.length;
-          document.getElementById('totalRevenueStat').textContent = `$${totalRevenue.toFixed(2)}`;
-          document.getElementById('totalProfitStat').textContent = `$${totalProfit.toFixed(2)}`;
-
-          // Profit Periods
-          document.getElementById('profitDay').textContent = `$${dayProfit.toFixed(2)}`;
-          document.getElementById('profitWeek').textContent = `$${weekProfit.toFixed(2)}`;
-          document.getElementById('profitMonth').textContent = `$${monthProfit.toFixed(2)}`;
-          document.getElementById('profitYear').textContent = `$${yearProfit.toFixed(2)}`;
         }
       } catch (err) {
-        console.error('Error fetching admin log:', err);
+        if (!isBackgroundSync) {
+          tableBody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-400">Erè koneksyon ak sèvè a.</td></tr>';
+        }
+      }
+    }
+
+    function renderOrdersTable(orders) {
+      const tableBody = document.getElementById('adminOrdersTable');
+
+      if (orders.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400">Pa gen okenn kòmònd disponib.</td></tr>';
+        return;
+      }
+
+      const newHTML = orders.map(order => {
+        const totalPrice = parseFloat(order.estimated_price) || 0;
+        
+        let statusBadge = '';
+        let actionButtons = '';
+
+        if (order.status === 'COMPLETED') {
+          statusBadge = '<span class="bg-pink-950 text-pink-300 border border-pink-800 text-xs px-2.5 py-1 rounded-full font-bold">KÒMÒND FINI</span>';
+          actionButtons = '<span class="text-xs text-slate-500 font-medium">Siksè</span>';
+        } else if (order.status === 'PAID_PROCESSING' || order.status === 'PAID') {
+          statusBadge = '<span class="bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold">PEYE & NAN TRAITMAN</span>';
+          actionButtons = `
+            <button onclick="updateOrderStatus('${order.id}', 'COMPLETED')" class="bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-md shadow-pink-600/30">
+              Maké Kòmònd Fini
+            </button>
+          `;
+        } else {
+          statusBadge = '<span class="bg-amber-950 text-amber-300 border border-amber-800 text-xs px-2.5 py-1 rounded-full font-bold">AN ATTANT PÈMAN</span>';
+          actionButtons = `
+            <div class="flex gap-2 justify-center">
+              <button onclick="updateOrderStatus('${order.id}', 'PAID')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-md shadow-emerald-600/30">
+                Aksepte Pèman
+              </button>
+              <button onclick="updateOrderStatus('${order.id}', 'COMPLETED')" class="bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-md shadow-pink-600/30">
+                Fini
+              </button>
+            </div>
+          `;
+        }
+
+        return `
+          <tr class="hover:bg-slate-900/50 transition">
+            <td class="p-4 font-mono font-bold text-emerald-400">${order.payment_code}</td>
+            <td class="p-4">
+              <div class="font-bold text-white">${order.full_name || order.client_name || 'Kliyan'}</div>
+              <div class="text-xs text-slate-400">${order.phone || order.client_phone || 'N/A'}</div>
+            </td>
+            <td class="p-4">
+              <div class="text-slate-200 font-semibold">${order.store_platform}</div>
+              <a href="${order.item_url}" target="_blank" class="text-xs text-pink-400 hover:underline max-w-xs truncate block">${order.item_url}</a>
+            </td>
+            <td class="p-4 font-bold text-white">$${totalPrice.toFixed(2)}</td>
+            <td class="p-4">${statusBadge}</td>
+            <td class="p-4 text-center">${actionButtons}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Avoid DOM flickering if order states have not changed
+      if (tableBody.innerHTML !== newHTML) {
+        tableBody.innerHTML = newHTML;
+      }
+    }
+
+    function updateMetrics(orders) {
+      const pendingCount = orders.filter(o => o.status === 'PENDING').length;
+      const completedCount = orders.filter(o => o.status === 'COMPLETED' || o.status === 'PAID' || o.status === 'PAID_PROCESSING').length;
+
+      document.getElementById('statPending').textContent = pendingCount;
+      document.getElementById('statCompleted').textContent = completedCount;
+    }
+
+    function filterOrders() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const filtered = allOrders.filter(order => {
+        const code = (order.payment_code || '').toLowerCase();
+        const phone = (order.phone || order.client_phone || '').toLowerCase();
+        const name = (order.full_name || order.client_name || '').toLowerCase();
+        return code.includes(query) || phone.includes(query) || name.includes(query);
+      });
+      renderOrdersTable(filtered);
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      try {
+        const res = await fetch(`/api/admin/orders/${orderId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          // Immediately trigger background refresh to sync all views
+          loadAdminOrders(true);
+        } else {
+          alert(data.message || 'Erè nan chanjman statu a.');
+        }
+      } catch (err) {
+        alert('Erè sèvè nan aksyon an.');
       }
     }
   </script>
